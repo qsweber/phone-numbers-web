@@ -1,0 +1,10 @@
+branches:
+  only:
+  - master
+language: python
+python: 3.6
+install: pip install awscli
+script:
+  # aws s3 mb s3://phonenumbers.quinnweber.com
+  # aws s3 website s3://phonenumbers.quinnweber.com --index-document index.html --error-document error.html
+- aws s3 sync --exclude '.git/*' --exclude 'README.md' --exclude '.travis.yml' --acl public-read --delete . s3://phonenumbers.quinnweber.com
