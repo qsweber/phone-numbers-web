@@ -1,0 +1,9 @@
+{
+  "env": "production",
+  "account": "120356305272",
+  "region": "us-west-2",
+  "bucketName": "phone-numbers.quinnweber.com",
+  "zoneId": "Z07290422T6PHN4TKVNW0",
+  "certificateArn": "arn:aws:acm:us-east-1:120356305272:certificate/10f59a3f-a08e-4b8d-8a4c-f0a5fcb61e83",
+  "apiUrl": "https://phone-numbers-api.quinnweber.com/v1"
+}

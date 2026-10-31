@@ -1,18 +1,11 @@
-module.exports = {
-    exportTrailingSlash: true,
-    exportPathMap: async function (
-        defaultPathMap, {
-            dev,
-            dir,
-            outDir,
-            distDir,
-            buildId
-        }
-    ) {
-        return {
-            '/': {
-                page: '/'
-            },
-        }
-    },
-}
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: "export",
+  trailingSlash: true,
+  images: {
+    unoptimized: true,
+  },
+  productionBrowserSourceMaps: true,
+};
+
+module.exports = nextConfig;

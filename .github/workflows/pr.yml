@@ -1,0 +1,31 @@
+name: Pull Request Workflow
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+    with:
+      stack: dev
+      environment: dev
+      run-deploy: true
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  production-preview:
+    name: CDK Diff (production)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - run: cd cdk && npm ci
+      - run: cd cdk && npx cdk diff phone-numbers-web-production
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: "us-west-2"
