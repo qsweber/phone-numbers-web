@@ -1,13 +1,17 @@
 "use client";
 
-import { FormEvent, useState } from "react";
-import { getMatch } from "../lib/api/client";
+import { FormEvent, useEffect, useState } from "react";
+import { getMatch, warmUp } from "../lib/api/client";
 
 export default function Home() {
   const [input, setInput] = useState("");
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    warmUp();
+  }, []);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
