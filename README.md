@@ -54,5 +54,6 @@ invalidates CloudFront, and then checks the live site and API respond.
 - Pull requests to `master` deploy `phone-numbers-web-dev` and show a CDK diff for production.
 - Pushes to `master` deploy `phone-numbers-web-production` and cut a GitHub release.
 
-Required repository secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`. The `dev` and
+No AWS secrets are needed: workflows assume the `github-actions-deploy` IAM role via GitHub OIDC
+(defined in [qsweber/infrastructure](https://github.com/qsweber/infrastructure)). The `dev` and
 `production` GitHub environments are used for the deploy job.
