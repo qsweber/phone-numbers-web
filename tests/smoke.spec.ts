@@ -6,6 +6,18 @@ import { test, expect, type Page } from "@playwright/test";
  * doesn't depend on (or hit) the deployed backend.
  */
 
+// The page pings the API on load to warm it up; mock that so tests stay offline.
+test.beforeEach(async ({ page }) => {
+  await page.route("**/ping", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      headers: { "Access-Control-Allow-Origin": "*" },
+      body: JSON.stringify({ ok: true, timestamp: new Date().toISOString() }),
+    });
+  });
+});
+
 function collectConsoleErrors(page: Page): string[] {
   const errors: string[] = [];
 
@@ -32,6 +44,14 @@ test("/ has no console errors", async ({ page }) => {
     page.getByRole("heading", { name: "Phone Numbers" }),
   ).toBeVisible();
   expect(errors).toEqual([]);
+});
+
+test("loading the page warms up the API", async ({ page }) => {
+  const ping = page.waitForRequest("**/ping");
+
+  await page.goto("/");
+
+  await ping;
 });
 
 test("submitting a phone number shows the match", async ({ page }) => {

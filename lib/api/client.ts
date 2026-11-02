@@ -22,6 +22,17 @@ const getBaseUrl = (): string => {
   return baseUrl;
 };
 
+/**
+ * Fire-and-forget request to wake the API before the user submits. This absorbs a Lambda cold
+ * start while the user is still typing, and opens the TCP/TLS connection that the browser then
+ * reuses for the /match request.
+ */
+export const warmUp = (): void => {
+  fetch(`${getBaseUrl()}/ping`).catch(() => {
+    // Best effort: a failed warm-up shouldn't affect the page.
+  });
+};
+
 export const getMatch = async (phoneNumber: string): Promise<MatchResponse> => {
   const url = `${getBaseUrl()}/match?value=${encodeURIComponent(phoneNumber)}`;
   const response = await fetch(url);
